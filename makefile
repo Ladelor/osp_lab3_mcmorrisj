@@ -1,4 +1,4 @@
-TARG = falsh
+SRCS = falsh.c commands.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -7,5 +7,5 @@ OPTS = -Wall -O
 clean: falsh
 	rm falsh
 
-false:
-	gcc $(OPTS) -o falsh falsh.c
+falsh:
+	gcc $(OPTS) -o falsh $(SRCS)

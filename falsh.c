@@ -10,13 +10,18 @@ int main(int argc, char* argv[])
 		int maxLength = 256;
 		//cstring to store user entry
 		char userInput[maxLength];
+		printf("The best shell! >> ");
 		fgets(userInput, maxLength, stdin);
 		if(strstr(userInput, "exit") != 0)
 		{
 			exitProgram();
 		}
-		else
-			printf("Nope\n");
+		else if(strstr(userInput, "pwd") != 0)
+		{
+			pwd();
+		}
+		//else
+		//	printf("Nope\n");
 	}
 	printf("hi\n");
 	return 0;

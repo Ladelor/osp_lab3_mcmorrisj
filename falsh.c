@@ -18,7 +18,9 @@ int main(int argc, char* argv[])
 		}
 		else if(strstr(userInput, "pwd") != 0)
 		{
-			pwd();
+			char buf[256];
+			pwd(buf);
+			printf("%s\n", buf);
 		}
 		//else
 		//	printf("Nope\n");

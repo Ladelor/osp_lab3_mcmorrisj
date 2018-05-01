@@ -4,7 +4,7 @@
 
 //Not named exit to avoid conflict built-in function warning
 int exitProgram();
-int pwd();
+int pwd(char*);
 int cd(char**);
 int setpath(char**);
 int help();

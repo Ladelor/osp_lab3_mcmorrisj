@@ -14,9 +14,8 @@ int exitProgram()
 	return -1;
 }
 
-int pwd()
+int pwd(char* buf)
 {
-	char buf[256];
 	//getcwd returns the current working directory
 	//buf is the char* which is passed in as a parameter
 	//this array will be set to a NULL terminated char array of the current working directory
@@ -29,7 +28,5 @@ int pwd()
 		fprintf(stdout, "Failed to get current working directory\n");
 		return -1;
 	}
-	//Succesful completion of cwd
-	printf("%s\n", buf);
 	return 0;
 }

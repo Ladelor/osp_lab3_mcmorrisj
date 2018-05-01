@@ -22,6 +22,10 @@ int main(int argc, char* argv[])
 			pwd(buf);
 			printf("%s\n", buf);
 		}
+		else if(userInput[0] == 'c' && userInput[1] == 'd')
+		{
+//			cd(argc, argv);
+		}
 		//else
 		//	printf("Nope\n");
 	}

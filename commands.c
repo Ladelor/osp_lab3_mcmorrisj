@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+
 int exitProgram()
 {
 	//Terminating process with success
@@ -27,6 +28,27 @@ int pwd(char* buf)
 	{
 		fprintf(stdout, "Failed to get current working directory\n");
 		return -1;
+	}
+	return 0;
+}
+
+int cd(char* filePath)
+{
+	if(filePath == NULL)
+	{
+		if(chdir(getenv("HOME")))
+		{
+			fprintf(stderr, "Failed to change directory\n");
+			return -1;
+		}
+		return 0;
+	}
+	else
+	{
+		if(chdir(filePath))
+		{
+			fprintf(stderr, "Failed to change directory\n");
+		}
 	}
 	return 0;
 }

@@ -12,6 +12,17 @@ int main(int argc, char* argv[])
 		char userInput[maxLength];
 		printf("The best shell! >> ");
 		fgets(userInput, maxLength, stdin);
+
+		char *userInputCopy = NULL;
+		userInputCopy = strdup(userInput);
+		char *args[100];
+		int argCount = 0;
+		while((args[argCount] = strtok(userInputCopy, " ")) != NULL)
+		{
+			argCount++;
+			userInputCopy = NULL;
+		}
+
 		if(strstr(userInput, "exit") != 0)
 		{
 			exitProgram();
@@ -24,7 +35,6 @@ int main(int argc, char* argv[])
 		}
 		else if(userInput[0] == 'c' && userInput[1] == 'd')
 		{
-//			cd(argc, argv);
 		}
 		//else
 		//	printf("Nope\n");

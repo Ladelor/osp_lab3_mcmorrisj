@@ -23,11 +23,11 @@ int main(int argc, char* argv[])
 			userInputCopy = NULL;
 		}
 
-		if(strstr(userInput, "exit") != 0)
+		if(strstr(args[0], "exit") != 0)
 		{
 			exitProgram();
 		}
-		else if(strstr(userInput, "pwd") != 0)
+		else if(strstr(args[0], "pwd") != 0)
 		{
 			char buf[256];
 			pwd(buf);

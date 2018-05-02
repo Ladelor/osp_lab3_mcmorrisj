@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "commands.h"
+#include <unistd.h>
 
 int main(int argc, char* argv[])
 {
@@ -23,6 +24,11 @@ int main(int argc, char* argv[])
 			userInputCopy = NULL;
 		}
 
+		//Without this, have an excess new line at the end of the last argument
+		//Go to the last argument, get the length, replace the length - 1 spot with a null term
+		//In effect, this replaces the unwanted \n with a \0
+		args[argCount - 1][strlen(args[argCount - 1]) - 1] = '\0';
+
 		if(strstr(args[0], "exit") != 0)
 		{
 			exitProgram();
@@ -33,11 +39,17 @@ int main(int argc, char* argv[])
 			pwd(buf);
 			printf("%s\n", buf);
 		}
-		else if(userInput[0] == 'c' && userInput[1] == 'd')
+		else if(strstr(args[0], "cd"))
 		{
+			if(argCount == 1)
+				cd(NULL);
+			else if(argCount == 2)
+				cd(args[1]);
+			else
+				printf("cd only accepts one argument\n");
 		}
-		//else
-		//	printf("Nope\n");
+		else
+			printf("Nope\n");
 	}
 	printf("hi\n");
 	return 0;

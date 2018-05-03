@@ -3,6 +3,7 @@
 #include "commands.h"
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/wait.h>
 
 int main(int argc, char* argv[])
 {
@@ -11,7 +12,6 @@ int main(int argc, char* argv[])
 
 	while(1)
 	{
-
 		//Assuming max input length is 256
 		int maxLength = 256;
 		//cstring to store user entry
@@ -58,8 +58,25 @@ int main(int argc, char* argv[])
 			setpath(argCount, args);
 		}
 		else
-			printf("Nope\n");
+		{
+			int rc = fork();
+			if(rc < 0)
+			{
+				fprintf(stderr, "Fork failed\n");
+				exit(1);
+			}
+			else if(rc == 0)
+			{
+				execvp(args[0], args);
+				printf("%s failed to execute\n", args[0]);
+				exit(1);
+			}
+			else
+			{
+				wait(NULL);
+			}
+		}
 	}
-	printf("hi\n");
+	//printf("hi\n");
 	return 0;
 }

@@ -1,7 +1,10 @@
+
 #include "commands.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
+#include <dirent.h>
 
 int exitProgram()
 {
@@ -41,13 +44,45 @@ int cd(char* filePath)
 			fprintf(stderr, "Failed to change directory\n");
 			return -1;
 		}
-		return 0;
 	}
 	else
 	{
 		if(chdir(filePath))
 		{
 			fprintf(stderr, "Failed to change directory\n");
+			return -1;
+		}
+	}
+	return 0;
+}
+
+
+int setpath(int argc, char* argv[])
+{
+	if(argc == 1)
+	{
+		fprintf(stderr, "Failed to set path, must have atleast one filePath parameter\n");
+		return -1;
+	}
+
+	//Storing old path in case there is a problem and we need to restore the old
+	char* oldPath = strdup(getenv("PATH"));
+	//Remove the values in PATH
+	setenv("PATH", "", 1);
+
+	for(int i = 1; i < argc; i++)
+	{
+		DIR* directory = opendir(argv[i]);
+		//This means argv[i] is a valid filePath
+		if(directory)
+		{
+			setenv("PATH", argv[i], 0);
+			closedir(directory);
+		}
+		else
+		{
+			setenv("PATH", oldPath, 1);
+			printf("");
 		}
 	}
 	return 0;

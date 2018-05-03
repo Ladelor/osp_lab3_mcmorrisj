@@ -56,7 +56,7 @@ int cd(char* filePath)
 	return 0;
 }
 
-
+//Not letting user setpath to an invalid filepath
 int setpath(int argc, char* argv[])
 {
 	if(argc == 1)
@@ -66,6 +66,7 @@ int setpath(int argc, char* argv[])
 	}
 
 	//Storing old path in case there is a problem and we need to restore the old
+	//Is this a memory leak if I don't free?
 	char* oldPath = strdup(getenv("PATH"));
 	//Remove the values in PATH
 	setenv("PATH", "", 1);
@@ -76,14 +77,21 @@ int setpath(int argc, char* argv[])
 		//This means argv[i] is a valid filePath
 		if(directory)
 		{
-			setenv("PATH", argv[i], 0);
+			if(i > 1)
+				setenv("PATH", strcat(getenv("PATH"), ":"), 1);
+			setenv("PATH", strcat(getenv("PATH"), argv[i]), 1);
 			closedir(directory);
 		}
 		else
 		{
+			//I'm not going to free here because I don't think setenv copies
 			setenv("PATH", oldPath, 1);
-			printf("");
+			fprintf(stderr, "Failed to setpath, %s was not \
+ a valid directory\n", argv[i]);
+			return -1;
 		}
 	}
+	free(oldPath);
+	printf("PATH set to: %s\n", getenv("PATH"));
 	return 0;
 }

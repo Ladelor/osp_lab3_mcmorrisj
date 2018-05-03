@@ -53,6 +53,10 @@ int main(int argc, char* argv[])
 			else
 				printf("cd only accepts one argument\n");
 		}
+		else if(strstr(args[0], "setpath"))
+		{
+			setpath(argCount, args);
+		}
 		else
 			printf("Nope\n");
 	}

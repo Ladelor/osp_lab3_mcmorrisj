@@ -9,6 +9,20 @@
 
 int main(int argc, char* argv[])
 {
+	if(argc == 2)
+	{
+		if(strstr(argv[1], "-h") != 0)
+		{
+			char buf[256];
+			FILE* file = fopen("help.txt", "r");
+
+			while((fgets(buf, 256, file)))
+			{
+				printf("%s", buf);
+			}
+			printf("\n");
+		}
+	}
 	//Reset PATH to only include /bin
 	setenv("PATH", "/bin", 1);
 

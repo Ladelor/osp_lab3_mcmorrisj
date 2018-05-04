@@ -30,6 +30,7 @@ int main(int argc, char* argv[])
 			argCount++;
 			userInputCopy = NULL;
 		}
+		free(userInputCopy);
 
 		//Without this, have an excess new line at the end of the last argument
 		//Go to the last argument, get the length, replace the length - 1 spot with a null term
@@ -41,12 +42,18 @@ int main(int argc, char* argv[])
 		int ERRCopy = dup(STDERR_FILENO);
 		if(argCount > 2)
 		{
+			char* fileCopy = strdup(args[argCount - 1]);
 			if(strstr(args[argCount - 2], ">") != 0)
 			{
 				close(STDOUT_FILENO);
-				fdOUT = open(strcat(args[argCount - 1],".out"),
+				fdOUT = open(strcat(fileCopy,".out"),
+					O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
+				close(STDERR_FILENO);
+				strcpy(fileCopy, args[argCount - 1]);
+				fdERR = open(strcat(fileCopy,".err"),
 					O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
 			}
+			free(fileCopy);
 		}
 
 		if(strstr(args[0], "exit") != 0)
@@ -98,6 +105,9 @@ int main(int argc, char* argv[])
 			dup2(OUTCopy, STDOUT_FILENO);
 			close(OUTCopy);
 			fdOUT = -1;
+			close(fdERR);
+			dup2(ERRCopy, STDERR_FILENO);
+			close(ERRCopy);
 		}
 	}
 	//printf("hi\n");

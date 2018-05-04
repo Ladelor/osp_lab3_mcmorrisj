@@ -21,8 +21,20 @@ int main(int argc, char* argv[])
 				printf("%s", buf);
 			}
 			printf("\n");
+			return 0;
+		}
+		else
+		{
+			printf("Invalid falsh call, no parameters or -h flag only\n");
+			return -1;
 		}
 	}
+	else if(argc > 2)
+	{
+		printf("Invalid falsh call, no parameters or -h flag only\n");
+		return -1;
+	}
+
 	//Reset PATH to only include /bin
 	setenv("PATH", "/bin", 1);
 

@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+#include <fcntl.h>
+//#include <sys/stat.h>
 
 int main(int argc, char* argv[])
 {
@@ -33,6 +35,19 @@ int main(int argc, char* argv[])
 		//Go to the last argument, get the length, replace the length - 1 spot with a null term
 		//In effect, this replaces the unwanted \n with a \0
 		args[argCount - 1][strlen(args[argCount - 1]) - 1] = '\0';
+
+		int fdOUT, fdERR = -1;
+		int OUTCopy = dup(STDOUT_FILENO);
+		int ERRCopy = dup(STDERR_FILENO);
+		if(argCount > 2)
+		{
+			if(strstr(args[argCount - 2], ">") != 0)
+			{
+				close(STDOUT_FILENO);
+				fdOUT = open(strcat(args[argCount - 1],".out"),
+					O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
+			}
+		}
 
 		if(strstr(args[0], "exit") != 0)
 		{
@@ -75,6 +90,14 @@ int main(int argc, char* argv[])
 			{
 				wait(NULL);
 			}
+		}
+
+		if(fdOUT != -1)
+		{
+			close(fdOUT);
+			dup2(OUTCopy, STDOUT_FILENO);
+			close(OUTCopy);
+			fdOUT = -1;
 		}
 	}
 	//printf("hi\n");

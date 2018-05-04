@@ -98,6 +98,10 @@ int main(int argc, char* argv[])
 		{
 			setpath(argCount, args);
 		}
+		else if(strstr(args[0], "help"))
+		{
+			help();
+		}
 		else
 		{
 			int rc = fork();

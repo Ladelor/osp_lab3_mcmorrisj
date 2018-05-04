@@ -1,0 +1,16 @@
+Get to this page by calling falsh -h or by calling help in falsh
+
+Built-in Commands:
+ - exit
+      Exits the program, no parameters
+ - pwd
+      Prints current working directory, no paramters
+ - cd [dir]
+      Change directory
+      No parameters changes to home directory
+      Single optional paramters changes to specified path
+ - setpath <dir> [dir] ... [dir]
+      Overwrites the path to one or more specified paths
+      DOES NOT check to make sure paths are valid
+ - help
+      Displays this screen

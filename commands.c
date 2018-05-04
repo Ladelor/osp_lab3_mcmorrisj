@@ -78,4 +78,13 @@ int setpath(int argc, char* argv[])
 	return 0;
 }
 
+int help()
+{
+	char buf[256];
+	FILE* file = fopen("help.txt", "r");
 
+	while(fgets(buf, 256, file))
+		printf("%s", buf);
+	printf("\n");
+	return 0;
+}

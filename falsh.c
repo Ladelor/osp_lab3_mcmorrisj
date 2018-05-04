@@ -13,14 +13,7 @@ int main(int argc, char* argv[])
 	{
 		if(strstr(argv[1], "-h") != 0)
 		{
-			char buf[256];
-			FILE* file = fopen("help.txt", "r");
-
-			while((fgets(buf, 256, file)))
-			{
-				printf("%s", buf);
-			}
-			printf("\n");
+			help();
 			return 0;
 		}
 		else

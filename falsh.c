@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <fcntl.h>
-//#include <sys/stat.h>
 
 int main(int argc, char* argv[])
 {
@@ -31,14 +30,21 @@ int main(int argc, char* argv[])
 	//Reset PATH to only include /bin
 	setenv("PATH", "/bin", 1);
 
+	int fdOUT = -1, fdERR = -1;
+	int OUTCopy = dup(STDOUT_FILENO);
+	int ERRCopy = dup(STDERR_FILENO);
+
 	while(1)
 	{
 		//Assuming max input length is 256
 		int maxLength = 256;
 		//cstring to store user entry
 		char userInput[maxLength];
-		printf("The best shell! >> ");
+		printf("Welcome to the best shell! >> ");
 		fgets(userInput, maxLength, stdin);
+
+		if(strlen(userInput) == 1)
+			continue;
 
 		char *userInputCopy = NULL;
 		userInputCopy = strdup(userInput);
@@ -56,24 +62,37 @@ int main(int argc, char* argv[])
 		//In effect, this replaces the unwanted \n with a \0
 		args[argCount - 1][strlen(args[argCount - 1]) - 1] = '\0';
 
-		int fdOUT, fdERR = -1;
-		int OUTCopy = dup(STDOUT_FILENO);
-		int ERRCopy = dup(STDERR_FILENO);
-		if(argCount > 2)
+		//int fdOUT, fdERR = -1;
+		//int OUTCopy = dup(STDOUT_FILENO);
+		//int ERRCopy = dup(STDERR_FILENO);
+		for(int i = 0; i < argCount; i++)
 		{
-			char* fileCopy = strdup(args[argCount - 1]);
-			if(strstr(args[argCount - 2], ">") != 0)
+			if(strstr(args[i], ">") != 0)
 			{
-				close(STDOUT_FILENO);
-				fdOUT = open(strcat(fileCopy,".out"),
+				if(i == (argCount - 2))
+				{
+					char* fileCopy = strdup(
+						args[argCount-1]);
+					close(STDOUT_FILENO);
+					fdOUT = open(strcat(fileCopy,".out"),
 					O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
-				close(STDERR_FILENO);
-				strcpy(fileCopy, args[argCount - 1]);
-				fdERR = open(strcat(fileCopy,".err"),
+					close(STDERR_FILENO);
+					strcpy(fileCopy, args[argCount - 1]);
+					fdERR = open(strcat(fileCopy,".err"),
 					O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
+					free(fileCopy);
+				}
+				else
+				{
+					printf("Invalid use of redirection \
+only one file argument allowed\n");
+					argCount = -1;
+				}
 			}
-			free(fileCopy);
 		}
+
+		if(argCount == -1)
+			continue;
 
 		if(strstr(args[0], "exit") != 0)
 		{
@@ -131,6 +150,7 @@ int main(int argc, char* argv[])
 			close(fdERR);
 			dup2(ERRCopy, STDERR_FILENO);
 			close(ERRCopy);
+			fdERR = -1;
 		}
 	}
 	//printf("hi\n");

@@ -100,9 +100,7 @@ only one file argument allowed\n");
 		}
 		else if(strstr(args[0], "pwd") != 0)
 		{
-			char buf[256];
-			pwd(buf);
-			printf("%s\n", buf);
+			pwd();
 		}
 		else if(strstr(args[0], "cd"))
 		{

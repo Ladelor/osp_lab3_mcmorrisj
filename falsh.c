@@ -132,7 +132,7 @@ only one file argument allowed\n");
 			else if(rc == 0)
 			{
 				execvp(args[0], args);
-				printf("%s failed to execute\n", args[0]);
+				printf("%s command not found\n", args[0]);
 				exit(1);
 			}
 			else
